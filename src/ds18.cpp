@@ -9,6 +9,8 @@
 #include "ds18.h"
 
 std::vector<ds_device_t> _devices;
+
+//TODO; these settings should be able to be obtained from web-config? 
 static const uint8_t ADDRESS_BOILER_IN[]  = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static const uint8_t ADDRESS_BOILER_OUT[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
