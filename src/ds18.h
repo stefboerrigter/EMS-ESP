@@ -26,7 +26,14 @@
 #define DS18_CMD_START_CONVERSION 0x44
 #define DS18_CMD_READ_SCRATCHPAD 0xBE
 
+typedef enum ds18_deviceid {
+  DID_BOILER_IN = 0,
+  DID_BOILER_OUT,
+  DID_UNKNOWN
+} ds18_deviceid_t; 
+
 typedef struct {
+    ds18_deviceid_t deviceID;
     uint8_t address[8];
     uint8_t data[DS18_DATA_SIZE];
 } ds_device_t;
@@ -40,6 +47,7 @@ class DS18 {
     void    loop();
     char *  getDeviceString(char * s, unsigned char index);
     double  getValue(unsigned char index);
+    ds18_deviceid_t getDeviceId(unsigned char index);
     int16_t getRawValue(unsigned char index); // raw values, needs / 16
 
   protected:

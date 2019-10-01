@@ -470,7 +470,7 @@ void showInfo() {
         char valuestr[8] = {0}; // for formatting temp
         myDebug_P(PSTR("%sExternal temperature sensors:%s"), COLOR_BOLD_ON, COLOR_BOLD_OFF);
         for (uint8_t i = 0; i < EMSESP_Settings.dallas_sensors; i++) {
-            myDebug_P(PSTR("  Sensor #%d %s: %s C"), i + 1, ds18.getDeviceString(buffer, i), _float_to_char(valuestr, ds18.getValue(i)));
+            myDebug_P(PSTR("  Sensor #%d %s: %s C (%d)"), i + 1, ds18.getDeviceString(buffer, i), _float_to_char(valuestr, ds18.getValue(i)), ds18.getDeviceId(i));
         }
     }
 
@@ -502,8 +502,15 @@ void publishSensorValues() {
         // round to 2 decimal places. from https://arduinojson.org/v6/faq/how-to-configure-the-serialization-of-floats/
         double sensorValue = (int)(ds18.getValue(i) * 100 + 0.5) / 100.0;
         if (sensorValue != DS18_DISCONNECTED && sensorValue != DS18_CRC_ERROR) {
-            sprintf(label, PAYLOAD_EXTERNAL_SENSORS, (i + 1));
-            sensors[label] = sensorValue;
+            if(ds18.getDeviceId(i) != DID_UNKNOWN)
+            {
+                sprintf(label, PAYLOAD_EXTERNAL_SENSORS, (ds18.getDeviceId(i)));
+            }
+            else
+            {
+                sprintf(label, PAYLOAD_EXTERNAL_SENSORS, (i + DID_UNKNOWN + 1));
+            }
+            sensors[label] = _float_to_char(valuestr, sensorValue);
             hasdata        = true;
         }
     }

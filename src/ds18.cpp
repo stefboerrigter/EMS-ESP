@@ -9,6 +9,8 @@
 #include "ds18.h"
 
 std::vector<ds_device_t> _devices;
+static const uint8_t ADDRESS_BOILER_IN[]  = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static const uint8_t ADDRESS_BOILER_OUT[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 DS18::DS18() {
     _wire     = nullptr;
@@ -189,6 +191,11 @@ double DS18::getValue(unsigned char index) {
     return value;
 }
 
+//Return type of device
+ds18_deviceid_t DS18::getDeviceId(unsigned char index) {
+    return _devices[index].deviceID;
+}
+
 // check for a supported DS chip version
 bool DS18::validateID(unsigned char id) {
     return (id == DS18_CHIP_DS18S20) || (id == DS18_CHIP_DS18B20) || (id == DS18_CHIP_DS1822) || (id == DS18_CHIP_DS1825);
@@ -212,6 +219,21 @@ uint8_t DS18::loadDevices() {
             // Check ID
             if (validateID(address[0])) {
                 ds_device_t device;
+
+                if(memcmp(device.address, ADDRESS_BOILER_IN, 8))
+                {
+                    device.deviceID = DID_BOILER_IN;
+                }
+                else if(memcmp(device.address, ADDRESS_BOILER_OUT, 8 ))
+                {
+                    device.deviceID = DID_BOILER_OUT;
+                }
+                else
+                {
+                    device.deviceID = DID_UNKNOWN;
+                }
+                
+                
                 memcpy(device.address, address, 8);
                 _devices.push_back(device);
             }
