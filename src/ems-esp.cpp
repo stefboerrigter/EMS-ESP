@@ -472,6 +472,9 @@ void showInfo() {
         for (uint8_t i = 0; i < EMSESP_Settings.dallas_sensors; i++) {
             myDebug_P(PSTR("  Sensor #%d %s: %s C (%d)"), i + 1, ds18.getDeviceString(buffer, i), _float_to_char(valuestr, ds18.getValue(i)), ds18.getDeviceId(i));
         }
+    }else{
+        myDebug_P(PSTR("")); //newline
+        myDebug_P(PSTR("No Sensors found on pin %d"), EMSESP_Settings.dallas_gpio); //info
     }
 
     // show the Shower Info
@@ -490,7 +493,7 @@ void publishSensorValues() {
     if (!myESP.isMQTTConnected()) {
         return;
     }
-
+    myDebug_P(PSTR("Publish Dalas Sensors"));
     StaticJsonDocument<200> doc;
     JsonObject              sensors = doc.to<JsonObject>();
 

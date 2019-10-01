@@ -11,9 +11,9 @@
 std::vector<ds_device_t> _devices;
 
 //TODO; these settings should be able to be obtained from web-config? 
-static const uint8_t ADDRESS_BOILER_IN[]  = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-static const uint8_t ADDRESS_BOILER_OUT[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-
+static const uint8_t ADDRESS_BOILER_IN[]  = {0x28, 0x65, 0xB7, 0x46, 0x92, 0x03, 0x02, 0x4F};
+static const uint8_t ADDRESS_BOILER_OUT[] = {0x28, 0xDC, 0xA8, 0x79, 0x97, 0x04, 0x03, 0x1A};
+                                             
 DS18::DS18() {
     _wire     = nullptr;
     _count    = 0;
@@ -222,11 +222,11 @@ uint8_t DS18::loadDevices() {
             if (validateID(address[0])) {
                 ds_device_t device;
 
-                if(memcmp(device.address, ADDRESS_BOILER_IN, 8))
+                if(memcmp(device.address, ADDRESS_BOILER_IN, 8) == 0)
                 {
                     device.deviceID = DID_BOILER_IN;
                 }
-                else if(memcmp(device.address, ADDRESS_BOILER_OUT, 8 ))
+                else if(memcmp(device.address, ADDRESS_BOILER_OUT, 8) == 0)
                 {
                     device.deviceID = DID_BOILER_OUT;
                 }
