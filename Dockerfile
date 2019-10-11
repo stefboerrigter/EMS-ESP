@@ -26,10 +26,11 @@ RUN mkdir -p /opt/EMS-ESP && \
 	cd tools/webfilesbuilder && \
 	npm install && \
 	cd /opt/EMS-ESP && \
-	pio run 
+	pio run
 
 USER 1001
 
-WORKDIR /workspace
+WORKDIR /opt/EMS-ESP
 
-ENTRYPOINT ["pio run -t upload"] 
+#hold / keep hanging on this.. now you can make changes if requested, or run pio -t upload.
+ENTRYPOINT ["tail","-f","/dev/null"]
