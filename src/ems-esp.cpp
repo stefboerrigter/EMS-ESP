@@ -499,7 +499,7 @@ void publishSensorValues() {
 
     bool hasdata  = false;
     char label[8] = {0};
-
+    char valuestr[8] = {0}; // for formatting temp
     // see if the sensor values have changed, if so send it on
     for (uint8_t i = 0; i < EMSESP_Settings.dallas_sensors; i++) {
         // round to 2 decimal places. from https://arduinojson.org/v6/faq/how-to-configure-the-serialization-of-floats/
