@@ -2868,8 +2868,9 @@ void ems_setThermostatTemp(float temperature, uint8_t hc_num, uint8_t temptype) 
     EMS_TxTelegram.comparisonOffset = EMS_TxTelegram.offset;
     EMS_TxTelegram.comparisonValue  = EMS_TxTelegram.dataValue;
 
-    EMS_TxTelegram.forceRefresh = false; // send to MQTT is done automatically in EMS_TYPE_RC*StatusMessage
+    EMS_TxTelegram.forceRefresh = true; // send to MQTT is done automatically in EMS_TYPE_RC*StatusMessage
     EMS_TxQueue.push(EMS_TxTelegram);
+
 }
 
 /**

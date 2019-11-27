@@ -706,6 +706,7 @@ void publishValues(bool force) {
                     if (thermostat->curr_roomTemp != EMS_VALUE_SHORT_NOTSET)
                         dataThermostat[THERMOSTAT_CURRTEMP] = (double)thermostat->curr_roomTemp / 10;
                 } else {
+                    myDebug_P(PSTR("SB MQTT: Transmitting setpoint %d"), thermostat->setpoint_roomTemp / 2);
                     if (thermostat->setpoint_roomTemp != EMS_VALUE_SHORT_NOTSET)
                         dataThermostat[THERMOSTAT_SELTEMP] = (double)thermostat->setpoint_roomTemp / 2;
                     if (thermostat->curr_roomTemp != EMS_VALUE_SHORT_NOTSET)
@@ -1624,8 +1625,10 @@ void MQTTCallback(unsigned int type, const char * topic, const char * message) {
     hc = _hasHCspecified(TOPIC_THERMOSTAT_CMD_TEMP, topic);
     if (hc) {
         float f = strtof((char *)message, 0);
+        int value = (int)(f * 100);
         ems_setThermostatTemp(f, hc);
-        publishValues(true); // publish back immediately
+        myDebug_P(PSTR("MQTT: Received new data %d"), value);
+        //publishValues(true); // publish back immediately
         return;
     }
 
